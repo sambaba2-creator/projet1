@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.layout.StackPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+             fx:controller="com.university.scheduler.ui.controller.AdminDashboardController">
+    
+    <top>
+        <VBox style="-fx-background-color: #2c3e50; -fx-padding: 10;">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Admin Dashboard" 
+                       style="-fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold;"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button text="Déconnexion" onAction="#handleLogout" 
+                        style="-fx-font-size: 12; -fx-padding: 5 15;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
+            
+            <!-- Statistics Tab -->
+            <Tab text="Statistiques">
+                <VBox spacing="10" style="-fx-padding: 15;">
+                    <Label text="Statistiques Système" 
+                           style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                    
+                    <GridPane hgap="20" vgap="20">
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="10" 
+                              style="-fx-border-color: #ecf0f1; -fx-padding: 15; -fx-border-radius: 5;">
+                            <Label text="Total Utilisateurs" style="-fx-font-size: 12;"/>
+                            <Label fx:id="totalUsersLabel" text="0" 
+                                   style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #3498db;"/>
+                        </VBox>
+
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="10"
+                              style="-fx-border-color: #ecf0f1; -fx-padding: 15; -fx-border-radius: 5;">
+                            <Label text="Total Salles" style="-fx-font-size: 12;"/>
+                            <Label fx:id="totalRoomsLabel" text="0" 
+                                   style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #e74c3c;"/>
+                        </VBox>
+
+                        <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="10"
+                              style="-fx-border-color: #ecf0f1; -fx-padding: 15; -fx-border-radius: 5;">
+                            <Label text="Total Bâtiments" style="-fx-font-size: 12;"/>
+                            <Label fx:id="totalBuildingsLabel" text="0" 
+                                   style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2ecc71;"/>
+                        </VBox>
+
+                        <VBox GridPane.columnIndex="3" GridPane.rowIndex="0" spacing="10"
+                              style="-fx-border-color: #ecf0f1; -fx-padding: 15; -fx-border-radius: 5;">
+                            <Label text="Total Cours" style="-fx-font-size: 12;"/>
+                            <Label fx:id="totalCoursesLabel" text="0" 
+                                   style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #f39c12;"/>
+                        </VBox>
+                    </GridPane>
+                    
+                    <!-- Chart: users/buildings/rooms -->
+                    <BarChart fx:id="statsBarChart" title="Répartition des ressources" prefHeight="300" prefWidth="800">
+                        <xAxis>
+                            <CategoryAxis fx:id="statsCategoryAxis" />
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis fx:id="statsNumberAxis" />
+                        </yAxis>
+                    </BarChart>
+                </VBox>
+            </Tab>
+
+            <!-- Users Tab -->
+            <Tab text="Utilisateurs">
+                <VBox spacing="10" style="-fx-padding: 15;">
+                    <Label text="Gestion des Utilisateurs" 
+                           style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                    
+                    <HBox spacing="10">
+                        <VBox spacing="5" prefWidth="200">
+                            <Label text="Nom:" style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="newUserNameField" promptText="Nom complet"/>
+                            
+                            <Label text="Email:" style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="newUserEmailField" promptText="Email"/>
+                            
+                            <Label text="Mot de passe:" style="-fx-font-weight: bold;"/>
+                            <PasswordField fx:id="newUserPasswordField" promptText="Mot de passe"/>
+                            
+                            <Label text="Rôle:" style="-fx-font-weight: bold;"/>
+                            <ComboBox fx:id="userRoleCombo" prefWidth="200"/>
+                            
+                            <Button text="Ajouter Utilisateur" onAction="#handleAddUser" 
+                                    style="-fx-padding: 8 15;"/>
+                        </VBox>
+
+                        <TableView fx:id="usersTable" prefHeight="550" HBox.hgrow="ALWAYS" prefWidth="600">
+                            <columns>
+                                <TableColumn fx:id="userNameCol" text="Nom" prefWidth="100"/>
+                                <TableColumn fx:id="userEmailCol" text="Email" prefWidth="150"/>
+                                <TableColumn fx:id="userRoleCol" text="Rôle" prefWidth="100"/>
+                            </columns>
+                        </TableView>
+                        
+                        <Button text="Supprimer" onAction="#handleDeleteUser" 
+                                style="-fx-padding: 8 15; -fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+                    </HBox>
+                </VBox>
+            </Tab>
+
+            <!-- Buildings Tab -->
+            <Tab text="Bâtiments">
+                <VBox spacing="10" style="-fx-padding: 15;">
+                    <Label text="Gestion des Bâtiments" 
+                           style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                    
+                    <HBox spacing="10">
+                        <VBox spacing="5" prefWidth="250">
+                            <Label text="Nom:" style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="newBuildingNameField" promptText="Nom du bâtiment"/>
+                            
+                            <Label text="Localisation:" style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="newBuildingLocationField" promptText="Localisation"/>
+                            
+                            <Label text="Étages:" style="-fx-font-weight: bold;"/>
+                            <Spinner fx:id="newBuildingFloorsSpinner"/>
+                            
+                            <Button text="Ajouter Bâtiment" onAction="#handleAddBuilding" 
+                                    style="-fx-padding: 8 15;"/>
+                        </VBox>
+
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <TableView fx:id="buildingsTable" prefHeight="450" VBox.vgrow="ALWAYS">
+                                <columns>
+                                    <TableColumn fx:id="buildingNameCol" text="Nom" prefWidth="150"/>
+                                    <TableColumn fx:id="buildingLocationCol" text="Localisation" prefWidth="150"/>
+                                </columns>
+                            </TableView>
+                            <Button text="Supprimer Bâtiment" onAction="#handleDeleteBuilding" 
+                                    style="-fx-padding: 8 15; -fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </Tab>
+
+            <!-- Rooms Tab -->
+            <Tab text="Salles">
+                <VBox spacing="10" style="-fx-padding: 15;">
+                    <Label text="Gestion des Salles" 
+                           style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                    
+                    <HBox spacing="10">
+                        <VBox spacing="5" prefWidth="250">
+                            <Label text="Numéro:" style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="newRoomNumberField" promptText="Ex: 101, 202"/>
+                            
+                            <Label text="Capacité:" style="-fx-font-weight: bold;"/>
+                            <Spinner fx:id="newRoomCapacitySpinner"/>
+                            
+                            <Label text="Type:" style="-fx-font-weight: bold;"/>
+                            <ComboBox fx:id="newRoomTypeCombo" promptText="Sélectionner type"/>
+                            
+                            <Label text="Bâtiment:" style="-fx-font-weight: bold;"/>
+                            <ComboBox fx:id="newRoomBuildingCombo" promptText="Sélectionner bâtiment"/>
+                            
+                            <Button text="Ajouter Salle" onAction="#handleAddRoom" 
+                                    style="-fx-padding: 8 15;"/>
+                        </VBox>
+
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <TableView fx:id="roomsTable" prefHeight="450" VBox.vgrow="ALWAYS">
+                                <columns>
+                                    <TableColumn fx:id="roomNumberCol" text="Numéro" prefWidth="100"/>
+                                    <TableColumn fx:id="roomCapacityCol" text="Capacité" prefWidth="100"/>
+                                    <TableColumn fx:id="roomTypeCol" text="Type" prefWidth="100"/>
+                                    <TableColumn fx:id="roomBuildingCol" text="Bâtiment" prefWidth="100"/>
+                                </columns>
+                            </TableView>
+                            <Button text="Supprimer Salle" onAction="#handleDeleteRoom" 
+                                    style="-fx-padding: 8 15; -fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>
